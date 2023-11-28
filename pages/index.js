@@ -53,25 +53,25 @@ export default function HomePage() {
     setATM(atmContract);
   }
 
-  const getBalance = async() => {
+  const getStatus = async() => {
     if (atm) {
-      setBalance((await atm.getBalance()).toNumber());
+      setBalance((await atm.getStatus()).toString());
     }
   }
 
-  const deposit = async() => {
+  const start_game = async() => {
     if (atm) {
-      let tx = await atm.deposit(1);
+      let tx = await atm.start("start");
       await tx.wait()
-      getBalance();
+      getStatus();
     }
   }
 
-  const withdraw = async() => {
+  const stop_game = async() => {
     if (atm) {
-      let tx = await atm.withdraw(1);
+      let tx = await atm.stop("stop");
       await tx.wait()
-      getBalance();
+      getStatus();
     }
   }
 
@@ -87,15 +87,15 @@ export default function HomePage() {
     }
 
     if (balance == undefined) {
-      getBalance();
+      getStatus();
     }
 
     return (
       <div>
         <p>Your Account: {account}</p>
-        <p>Your Balance: {balance}</p>
-        <button onClick={deposit}>Deposit 1 ETH</button>
-        <button onClick={withdraw}>Withdraw 1 ETH</button>
+        <p>Game Status: {balance}</p>
+        <button onClick={start_game}>Start Game</button>
+        <button onClick={stop_game}>Stop Game</button>
       </div>
     )
   }
@@ -104,11 +104,15 @@ export default function HomePage() {
 
   return (
     <main className="container">
-      <header><h1>Welcome to the Metacrafters ATM!</h1></header>
+      <header><h1>Start/Stop Game</h1></header>
       {initUser()}
       <style jsx>{`
         .container {
-          text-align: center
+          text-align: center;
+          
+        }
+        *{
+          background-color:green;
         }
       `}
       </style>
